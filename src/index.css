@@ -1,0 +1,1687 @@
+@import "tailwindcss";
+
+/* ===== iOS Liquid Glass Design System ===== */
+
+:root {
+  /* Glass surface tokens */
+  --glass-bg: rgba(255, 255, 255, 0.18);
+  --glass-bg-strong: rgba(255, 255, 255, 0.28);
+  --glass-bg-hover: rgba(255, 255, 255, 0.26);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.40);
+  --glass-border-subtle: rgba(255, 255, 255, 0.18);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --glass-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.20);
+  --glass-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.28);
+  --glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.50);
+  --glass-blur: blur(20px) saturate(180%);
+  --glass-blur-heavy: blur(40px) saturate(200%);
+
+  /* Sidebar */
+  --sidebar-bg: rgba(12, 12, 28, 0.72);
+  --sidebar-blur: blur(40px) saturate(200%);
+  --sidebar-text: rgba(255, 255, 255, 0.70);
+  --sidebar-text-active: white;
+  --sidebar-hover: rgba(255, 255, 255, 0.10);
+
+  /* Text */
+  --text-on-glass: rgba(255, 255, 255, 0.95);
+  --text-on-glass-secondary: rgba(255, 255, 255, 0.65);
+  --text-on-glass-muted: rgba(255, 255, 255, 0.45);
+  --text-heading: white;
+  --text-body: rgba(255, 255, 255, 0.85);
+  --text-label: rgba(255, 255, 255, 0.50);
+
+  /* Table */
+  --table-header-bg: rgba(255, 255, 255, 0.06);
+  --table-header-text: rgba(255, 255, 255, 0.60);
+  --table-row-border: rgba(255, 255, 255, 0.06);
+  --table-row-hover: rgba(255, 255, 255, 0.06);
+  --table-cell: rgba(255, 255, 255, 0.85);
+
+  /* Modal */
+  --modal-bg: rgba(20, 20, 40, 0.75);
+  --modal-specular: rgba(255, 255, 255, 0.08);
+
+  /* Toast */
+  --toast-bg: rgba(20, 20, 40, 0.80);
+
+  /* Input */
+  --input-bg: rgba(255, 255, 255, 0.10);
+  --input-bg-focus: rgba(255, 255, 255, 0.16);
+  --input-border: rgba(255, 255, 255, 0.20);
+  --input-border-focus: rgba(96, 165, 250, 0.60);
+  --input-text: white;
+  --input-placeholder: rgba(255, 255, 255, 0.40);
+  --input-option-bg: #1a1a2e;
+
+  /* Button */
+  --btn-text: white;
+  --btn-bg: rgba(255, 255, 255, 0.16);
+  --btn-bg-hover: rgba(255, 255, 255, 0.26);
+  --btn-border: rgba(255, 255, 255, 0.30);
+  --btn-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+  --btn-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.40);
+
+  /* Badge */
+  --badge-green-text: #86efac;
+  --badge-green-bg: rgba(34, 197, 94, 0.25);
+  --badge-blue-text: #93c5fd;
+  --badge-blue-bg: rgba(59, 130, 246, 0.25);
+  --badge-red-text: #fca5a5;
+  --badge-red-bg: rgba(239, 68, 68, 0.25);
+  --badge-purple-text: #d8b4fe;
+  --badge-purple-bg: rgba(168, 85, 247, 0.25);
+  --badge-amber-text: #fde68a;
+  --badge-amber-bg: rgba(245, 158, 11, 0.25);
+  --badge-orange-text: #fdba74;
+  --badge-orange-bg: rgba(249, 115, 22, 0.25);
+  --badge-gray-text: #d1d5db;
+  --badge-gray-bg: rgba(156, 163, 175, 0.20);
+
+  /* Scrollbar — derived from the ink palette, declared ONCE: mixed at 35%
+     (55% on hover) so every brightness/preset (Midnight, Ember, Paper, and
+     any future one) gets a thumb in its own text color at the same strength
+     without re-declaring tokens. Substitution is lazy, so the
+     [data-brightness]/[data-theme] overrides of --text-on-glass-muted below
+     apply automatically. */
+  --scrollbar-thumb: color-mix(in srgb, var(--text-on-glass-muted) 35%, transparent);
+  --scrollbar-thumb-hover: color-mix(in srgb, var(--text-on-glass-muted) 55%, transparent);
+
+  /* Focus */
+  --focus-ring: rgba(96, 165, 250, 0.70);
+
+  /* Nav */
+  --nav-hover: rgba(255, 255, 255, 0.10);
+  --nav-active-bg: rgba(59, 130, 246, 0.25);
+  --nav-active-border: rgba(96, 165, 250, 0.30);
+
+  /* Specular */
+  --specular-overlay: rgba(255, 255, 255, 0.18);
+  --specular-subtle: rgba(255, 255, 255, 0.06);
+
+  /* ── Semantic status / link tokens ──────────────────────────────────────
+     The single source of color for status UI and links. src/ never names a
+     Tailwind palette class directly (doctor check #18 enforces this); it
+     references these instead, so a hue change or preset tweak is ONE edit.
+
+     Tiers map to source shades in node_modules/tailwindcss/theme.css:
+       -hi = 300 (200s collapse into this tier)   base = 400
+       -strong = 500   -deep = 600   -darker = 700   -darkest = 900
+       (ui-neutral-darkest is gray-800 — its only dark-deep usage)
+
+     Family sources: success = emerald, warning = amber (orange collapses
+     in), info = blue (doubles as the link color), neutral = gray (slate/
+     zinc/neutral/stone collapse in). Values are byte-identical to the
+     Tailwind palette, so the 2026-10-07 sweep of literal classes was
+     visually neutral except the deliberate green→emerald / orange→amber /
+     slate→gray merges. Declared once in :root — presets inherit them,
+     matching how literal palette classes behaved. */
+  --status-danger-hi: oklch(80.8% 0.114 19.571);
+  --status-danger: oklch(70.4% 0.191 22.216);
+  --status-danger-strong: oklch(63.7% 0.237 25.331);
+  --status-danger-deep: oklch(57.7% 0.245 27.325);
+  --status-danger-darkest: oklch(39.6% 0.141 25.723);
+
+  --status-success-hi: oklch(84.5% 0.143 164.978);
+  --status-success: oklch(76.5% 0.177 163.223);
+  --status-success-strong: oklch(69.6% 0.17 162.48);
+  --status-success-deep: oklch(59.6% 0.145 163.225);
+  --status-success-darkest: oklch(37.8% 0.077 168.94);
+
+  --status-warning-hi: oklch(87.9% 0.169 91.605);
+  --status-warning: oklch(82.8% 0.189 84.429);
+  --status-warning-strong: oklch(76.9% 0.188 70.08);
+  --status-warning-deep: oklch(66.6% 0.179 58.318);
+  --status-warning-darkest: oklch(41.4% 0.112 45.904);
+
+  --status-info-hi: oklch(80.9% 0.105 251.813);
+  --status-info: oklch(70.7% 0.165 254.624);
+  --status-info-strong: oklch(62.3% 0.214 259.815);
+  --status-info-deep: oklch(54.6% 0.245 262.881);
+  --status-info-darkest: oklch(37.9% 0.146 265.522);
+
+  --ui-violet-hi: oklch(81.1% 0.111 293.571);
+  --ui-violet: oklch(70.2% 0.183 293.541);
+  --ui-violet-strong: oklch(60.6% 0.25 292.717);
+
+  --ui-indigo-hi: oklch(78.5% 0.115 274.713);
+  --ui-indigo: oklch(67.3% 0.182 276.935);
+  --ui-indigo-strong: oklch(58.5% 0.233 277.117);
+  --ui-indigo-deep: oklch(51.1% 0.262 276.966);
+  --ui-indigo-darkest: oklch(35.9% 0.144 278.697);
+
+  --ui-purple-hi: oklch(82.7% 0.119 306.383);
+  --ui-purple: oklch(71.4% 0.203 305.504);
+  --ui-purple-strong: oklch(62.7% 0.265 303.9);
+  --ui-purple-deep: oklch(55.8% 0.288 302.321);
+  --ui-purple-darkest: oklch(38.1% 0.176 304.987);
+
+  --ui-pink-hi: oklch(82.3% 0.12 346.018);
+  --ui-pink: oklch(71.8% 0.202 349.761);
+  --ui-pink-strong: oklch(65.6% 0.241 354.308);
+
+  --ui-sky-hi: oklch(82.8% 0.111 230.318);
+  --ui-sky: oklch(74.6% 0.16 232.661);
+  --ui-sky-strong: oklch(68.5% 0.169 237.323);
+
+  --ui-cyan-hi: oklch(86.5% 0.127 207.078);
+  --ui-cyan: oklch(78.9% 0.154 211.53);
+  --ui-cyan-strong: oklch(71.5% 0.143 215.221);
+
+  --ui-neutral-hi: oklch(87.2% 0.01 258.338);
+  --ui-neutral: oklch(70.7% 0.022 261.325);
+  --ui-neutral-strong: oklch(55.1% 0.027 264.364);
+  --ui-neutral-deep: oklch(44.6% 0.03 256.802);
+  --ui-neutral-darker: oklch(37.3% 0.034 259.733);
+  --ui-neutral-darkest: oklch(27.8% 0.033 256.848);
+
+  /* Easing */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== BRIGHTNESS PATCH LAYER (shared by all light presets) =====
+   Was keyed per-theme — one copy per light theme. Now keyed on
+   data-brightness so Daylight AND Paper (and every future light preset)
+   inherit these contrast overrides for free. Defined BEFORE the preset
+   deltas below: equal specificity → later wins, so a preset refines the
+   patch only where it intentionally differs. */
+[data-brightness="light"] {
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-bg-strong: rgba(255, 255, 255, 0.60);
+  --glass-bg-hover: rgba(255, 255, 255, 0.55);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.30);
+  --glass-border: rgba(255, 255, 255, 0.60);
+  --glass-border-subtle: rgba(0, 0, 0, 0.08);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.12);
+  --glass-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.16);
+  --glass-highlight: inset 0 1px 0 0 rgba(255, 255, 255, 0.70);
+
+  /* Sidebar */
+  --sidebar-bg: rgba(240, 240, 248, 0.72);
+  --sidebar-blur: blur(40px) saturate(180%);
+  --sidebar-text: rgba(40, 40, 60, 0.70);
+  --sidebar-text-active: #1a1a3e;
+  --sidebar-hover: rgba(0, 0, 0, 0.05);
+
+  /* Text */
+  --text-on-glass: rgba(20, 20, 40, 0.95);
+  --text-on-glass-secondary: rgba(20, 20, 40, 0.60);
+  --text-on-glass-muted: rgba(20, 20, 40, 0.40);
+  --text-heading: rgba(15, 15, 30, 0.95);
+  --text-body: rgba(30, 30, 50, 0.85);
+  --text-label: rgba(30, 30, 50, 0.55);
+
+  /* Table */
+  --table-header-bg: rgba(0, 0, 0, 0.04);
+  --table-header-text: rgba(30, 30, 50, 0.55);
+  --table-row-border: rgba(0, 0, 0, 0.06);
+  --table-row-hover: rgba(0, 0, 0, 0.03);
+  --table-cell: rgba(30, 30, 50, 0.88);
+
+  /* Modal */
+  --modal-bg: rgba(255, 255, 255, 0.80);
+  --modal-specular: rgba(255, 255, 255, 0.50);
+
+  /* Toast */
+  --toast-bg: rgba(255, 255, 255, 0.85);
+
+  /* Input */
+  --input-bg: rgba(0, 0, 0, 0.04);
+  --input-bg-focus: rgba(0, 0, 0, 0.06);
+  --input-border: rgba(0, 0, 0, 0.12);
+  --input-border-focus: rgba(59, 130, 246, 0.50);
+  --input-text: rgba(15, 15, 30, 0.90);
+  --input-placeholder: rgba(30, 30, 50, 0.35);
+  --input-option-bg: #ffffff;
+
+  /* Button */
+  --btn-text: rgba(30, 30, 50, 0.90);
+  --btn-bg: rgba(255, 255, 255, 0.40);
+  --btn-bg-hover: rgba(255, 255, 255, 0.55);
+  --btn-border: rgba(0, 0, 0, 0.08);
+  --btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --btn-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.60);
+
+  /* Badge — more saturated for contrast on light glass */
+  --badge-green-text: #166534;
+  --badge-green-bg: rgba(34, 197, 94, 0.20);
+  --badge-blue-text: #1e40af;
+  --badge-blue-bg: rgba(59, 130, 246, 0.18);
+  --badge-red-text: #991b1b;
+  --badge-red-bg: rgba(239, 68, 68, 0.15);
+  --badge-purple-text: #6b21a8;
+  --badge-purple-bg: rgba(168, 85, 247, 0.18);
+  --badge-amber-text: #92400e;
+  --badge-amber-bg: rgba(245, 158, 11, 0.18);
+  --badge-orange-text: #9a3412;
+  --badge-orange-bg: rgba(249, 115, 22, 0.18);
+  --badge-gray-text: #4b5563;
+  --badge-gray-bg: rgba(107, 114, 128, 0.12);
+
+  /* Focus */
+  --focus-ring: rgba(59, 130, 246, 0.60);
+
+  /* Nav */
+  --nav-hover: rgba(0, 0, 0, 0.05);
+  --nav-active-bg: rgba(59, 130, 246, 0.15);
+  --nav-active-border: rgba(59, 130, 246, 0.30);
+
+  /* Specular */
+  --specular-overlay: rgba(255, 255, 255, 0.50);
+  --specular-subtle: rgba(255, 255, 255, 0.30);
+}
+
+/* ===== THEME PRESETS (PLAN.MD §13) =====
+   Presets are TOKEN SETS on [data-theme]; dark/light are entries, not the
+   axis. Layer order: :root base → [data-brightness] patch (above) → these
+   preset deltas LAST, so each preset refines the shared patch only where
+   it intentionally differs (equal specificity → later wins). Adding a
+   preset needs NO new override rules — one token delta + one body
+   gradient here; light presets inherit the whole patch for free. */
+
+/* ── Midnight (dark preset): deep navy, focus-friendly ── */
+[data-theme="midnight"] {
+  --glass-bg: rgba(148, 163, 184, 0.10);
+  --glass-bg-strong: rgba(148, 163, 184, 0.16);
+  --glass-bg-hover: rgba(148, 163, 184, 0.14);
+  --glass-bg-subtle: rgba(148, 163, 184, 0.06);
+  --glass-border: rgba(148, 163, 184, 0.28);
+  --glass-border-subtle: rgba(148, 163, 184, 0.14);
+  --sidebar-bg: rgba(2, 6, 23, 0.78);
+  --text-heading: #e2e8f0;
+  --text-body: rgba(226, 232, 240, 0.85);
+  --modal-bg: rgba(15, 23, 42, 0.82);
+  --toast-bg: rgba(15, 23, 42, 0.86);
+  --input-option-bg: #0f172a;
+  --nav-active-bg: rgba(96, 165, 250, 0.18);
+}
+
+/* ── Ember (dark preset): warm charcoal, amber glow ── */
+[data-theme="ember"] {
+  --glass-bg: rgba(180, 120, 70, 0.10);
+  --glass-bg-strong: rgba(180, 120, 70, 0.16);
+  --glass-bg-hover: rgba(180, 120, 70, 0.14);
+  --glass-bg-subtle: rgba(180, 120, 70, 0.06);
+  --glass-border: rgba(217, 150, 90, 0.26);
+  --glass-border-subtle: rgba(217, 150, 90, 0.13);
+  --sidebar-bg: rgba(20, 13, 9, 0.80);
+  --text-heading: #f3e5d3;
+  --text-body: rgba(243, 229, 211, 0.85);
+  --modal-bg: rgba(28, 20, 16, 0.84);
+  --toast-bg: rgba(28, 20, 16, 0.88);
+  --input-option-bg: #241a13;
+  --nav-active-bg: rgba(251, 191, 36, 0.16);
+}
+
+/* ── Paper (light preset): warm minimal daylight ── */
+[data-theme="paper"] {
+  --glass-bg: rgba(255, 252, 247, 0.50);
+  --glass-bg-strong: rgba(255, 252, 247, 0.66);
+  --glass-bg-hover: rgba(255, 252, 247, 0.60);
+  --glass-bg-subtle: rgba(120, 100, 80, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-border-subtle: rgba(120, 100, 80, 0.12);
+  --sidebar-bg: rgba(243, 237, 228, 0.80);
+  --sidebar-text: rgba(66, 55, 44, 0.72);
+  --sidebar-text-active: #2d2419;
+  --text-on-glass: rgba(45, 36, 25, 0.95);
+  --text-on-glass-secondary: rgba(66, 55, 44, 0.65);
+  --text-on-glass-muted: rgba(66, 55, 44, 0.42);
+  --text-heading: rgba(35, 28, 18, 0.95);
+  --text-body: rgba(50, 42, 30, 0.88);
+  --text-label: rgba(66, 55, 44, 0.55);
+  --table-header-bg: rgba(120, 100, 80, 0.05);
+  --table-cell: rgba(50, 42, 30, 0.88);
+  --modal-bg: rgba(252, 248, 242, 0.88);
+  --toast-bg: rgba(252, 248, 242, 0.92);
+  --input-bg: rgba(120, 100, 80, 0.05);
+  --input-bg-focus: rgba(120, 100, 80, 0.08);
+  --input-border: rgba(120, 100, 80, 0.18);
+  --input-text: rgba(35, 28, 18, 0.92);
+  --input-option-bg: #fffdf9;
+  --btn-text: rgba(50, 42, 30, 0.92);
+  --btn-bg: rgba(255, 252, 247, 0.55);
+  --btn-bg-hover: rgba(255, 252, 247, 0.72);
+  --nav-hover: rgba(120, 100, 80, 0.07);
+  --nav-active-bg: rgba(180, 140, 60, 0.16);
+  --focus-ring: rgba(180, 140, 60, 0.60);
+  --specular-overlay: rgba(255, 255, 255, 0.55);
+  --specular-subtle: rgba(255, 255, 255, 0.32);
+}
+
+/* ── Noir (dark preset): pure black, monochrome focus ── */
+[data-theme="noir"] {
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-strong: rgba(255, 255, 255, 0.11);
+  --glass-bg-hover: rgba(255, 255, 255, 0.09);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-border-subtle: rgba(255, 255, 255, 0.10);
+  --sidebar-bg: rgba(0, 0, 0, 0.86);
+  --text-heading: #f5f5f5;
+  --text-body: rgba(245, 245, 245, 0.85);
+  --modal-bg: rgba(8, 8, 8, 0.88);
+  --toast-bg: rgba(12, 12, 12, 0.92);
+  --input-option-bg: #0a0a0a;
+  --nav-active-bg: rgba(255, 255, 255, 0.16);
+}
+
+/* ── Aurora (dark preset): teal-green northern glow ── */
+[data-theme="aurora"] {
+  --glass-bg: rgba(45, 212, 191, 0.08);
+  --glass-bg-strong: rgba(45, 212, 191, 0.14);
+  --glass-bg-hover: rgba(45, 212, 191, 0.12);
+  --glass-bg-subtle: rgba(45, 212, 191, 0.05);
+  --glass-border: rgba(94, 234, 212, 0.24);
+  --glass-border-subtle: rgba(94, 234, 212, 0.12);
+  --sidebar-bg: rgba(2, 10, 14, 0.82);
+  --text-heading: #ccfbf1;
+  --text-body: rgba(204, 251, 241, 0.85);
+  --modal-bg: rgba(6, 24, 30, 0.86);
+  --toast-bg: rgba(8, 28, 34, 0.90);
+  --input-option-bg: #042f2e;
+  --nav-active-bg: rgba(45, 212, 191, 0.18);
+}
+
+/* ── Slate (dark preset): cool graphite, steel blue ── */
+[data-theme="slate"] {
+  --glass-bg: rgba(203, 213, 225, 0.07);
+  --glass-bg-strong: rgba(203, 213, 225, 0.13);
+  --glass-bg-hover: rgba(203, 213, 225, 0.11);
+  --glass-bg-subtle: rgba(203, 213, 225, 0.04);
+  --glass-border: rgba(203, 213, 225, 0.22);
+  --glass-border-subtle: rgba(203, 213, 225, 0.11);
+  --sidebar-bg: rgba(13, 15, 19, 0.84);
+  --text-heading: #e9eef5;
+  --text-body: rgba(233, 238, 245, 0.85);
+  --modal-bg: rgba(21, 24, 29, 0.86);
+  --toast-bg: rgba(24, 27, 33, 0.90);
+  --input-option-bg: #1a1f26;
+  --nav-active-bg: rgba(125, 148, 178, 0.22);
+}
+
+/* ── Matcha (light preset): soft green tea daylight ──
+   Same luminance structure as Paper (the light floors' setter) with the
+   hue rotated to green; --sidebar-text sits darker than Paper's because
+   the green channel reads lighter — keeps the 4.5 sidebar-text floor. */
+[data-theme="matcha"] {
+  --glass-bg: rgba(247, 251, 238, 0.50);
+  --glass-bg-strong: rgba(247, 251, 238, 0.66);
+  --glass-bg-hover: rgba(247, 251, 238, 0.60);
+  --glass-bg-subtle: rgba(90, 110, 70, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-border-subtle: rgba(90, 110, 70, 0.12);
+  --sidebar-bg: rgba(237, 243, 227, 0.80);
+  --sidebar-text: rgba(44, 56, 32, 0.72);
+  --sidebar-text-active: #1c2611;
+  --text-on-glass: rgba(34, 44, 24, 0.95);
+  --text-on-glass-secondary: rgba(44, 56, 32, 0.65);
+  --text-on-glass-muted: rgba(44, 56, 32, 0.42);
+  --text-heading: rgba(28, 36, 20, 0.95);
+  --text-body: rgba(42, 52, 30, 0.88);
+  --text-label: rgba(44, 56, 32, 0.55);
+  --table-header-bg: rgba(90, 110, 70, 0.05);
+  --table-cell: rgba(42, 52, 30, 0.88);
+  --modal-bg: rgba(247, 251, 240, 0.88);
+  --toast-bg: rgba(247, 251, 240, 0.92);
+  --input-bg: rgba(90, 110, 70, 0.05);
+  --input-bg-focus: rgba(90, 110, 70, 0.08);
+  --input-border: rgba(90, 110, 70, 0.18);
+  --input-border-focus: rgba(74, 142, 87, 0.55);
+  --input-text: rgba(28, 36, 20, 0.92);
+  --input-option-bg: #f7faf1;
+  --btn-text: rgba(42, 52, 30, 0.92);
+  --btn-bg: rgba(247, 251, 238, 0.58);
+  --btn-bg-hover: rgba(247, 251, 238, 0.75);
+  --nav-hover: rgba(90, 110, 70, 0.07);
+  --nav-active-bg: rgba(90, 150, 80, 0.16);
+  --nav-active-border: rgba(74, 142, 87, 0.30);
+  --focus-ring: rgba(74, 142, 87, 0.60);
+  --specular-overlay: rgba(255, 255, 255, 0.55);
+  --specular-subtle: rgba(255, 255, 255, 0.32);
+}
+
+/* ===== Body: Vibrant gradient that shows through glass ===== */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg,
+    #3b28cc 0%, #6c3fc5 15%, #a855f7 30%,
+    #ec4899 45%, #f43f5e 55%,
+    #3b82f6 70%, #06b6d4 85%, #10b981 100%
+  );
+  background-attachment: fixed;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: white;
+}
+
+[data-brightness="light"] body {
+  background: linear-gradient(135deg,
+    #c4b5fd 0%, #d8b4fe 15%, #f0abfc 30%,
+    #f9a8d4 45%, #fda4af 55%,
+    #93c5fd 70%, #67e8f9 85%, #6ee7b7 100%
+  );
+}
+
+/* ── Body gradients per preset (the one thing that IS per-theme) ── */
+[data-theme="midnight"] body {
+  background: linear-gradient(135deg,
+    #0f172a 0%, #1e293b 35%, #1e3a5f 65%, #0f172a 100%
+  );
+}
+
+[data-theme="ember"] body {
+  background: linear-gradient(135deg,
+    #1c1410 0%, #2b1d12 40%, #3b2a1a 65%, #14100c 100%
+  );
+}
+
+[data-theme="paper"] body {
+  background: linear-gradient(135deg,
+    #e7e0d8 0%, #f3ede4 40%, #efe6d8 70%, #dcd3c6 100%
+  );
+}
+
+[data-theme="noir"] body {
+  background: linear-gradient(135deg,
+    #000000 0%, #0a0a0a 35%, #141414 65%, #050505 100%
+  );
+}
+
+[data-theme="aurora"] body {
+  background: linear-gradient(135deg,
+    #020617 0%, #042f2e 30%, #0f766e 55%, #312e81 80%, #020617 100%
+  );
+}
+
+[data-theme="slate"] body {
+  background: linear-gradient(135deg,
+    #111418 0%, #1a1f26 35%, #262d36 65%, #111418 100%
+  );
+}
+
+[data-theme="matcha"] body {
+  background: linear-gradient(135deg,
+    #eef3e6 0%, #e3ecda 35%, #d4e2c6 65%, #c6d8b6 100%
+  );
+}
+
+/* ===== Decor axis (registry pref `decor` → <html data-decor>) =====
+   Orthogonal to theme + accent: ONE body::before layer painted above the
+   canvas gradient (negative z-index) and behind ALL content, so any decor
+   combines with any preset + accent — the style matrix grows by four, not
+   by (presets × accents). Exactly one value matches the attribute; the
+   layer is display:none otherwise (that is the 'none' value).
+   GATING (motion + performance prefs, both on <html>): the drift animation
+   is enabled ONLY by the [data-motion="full"][data-performance="off"]
+   rule below — reduced/off motion or performance mode simply never match
+   it, leaving a static (cheap: gradients + one tiled bitmap) layer. The OS
+   reduced-motion override follows, at matching specificity, later wins. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;              /* above the canvas gradient, below the app */
+  pointer-events: none;
+  display: none;
+}
+
+/* 'none' restated explicitly so the value is a real selector, not just
+   the absence of one (scripts/testPreferencesRegistry.js styles every
+   registry value — a contract, not a coincidence). */
+[data-decor="none"] body::before {
+  display: none;
+}
+
+/* ── Grain: one tiled fractal-noise bitmap, always static ── */
+[data-decor="grain"] body::before {
+  display: block;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23grain)' opacity='0.30'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  opacity: 0.16;
+}
+
+/* ── Aurora: four soft color blobs; drifts only when enabled below ── */
+[data-decor="aurora"] body::before {
+  display: block;
+  background-image:
+    radial-gradient(42vw 42vw at 18% 22%, rgba(56, 189, 248, 0.38), transparent 62%),
+    radial-gradient(38vw 38vw at 82% 18%, rgba(168, 85, 247, 0.34), transparent 60%),
+    radial-gradient(46vw 46vw at 62% 78%, rgba(236, 72, 153, 0.28), transparent 64%),
+    radial-gradient(40vw 40vw at 24% 82%, rgba(16, 185, 129, 0.24), transparent 62%);
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+}
+
+/* ── Chromatic glow: accent-tinted bloom, follows --accent, always static ── */
+[data-decor="glow"] body::before {
+  display: block;
+  background-image:
+    radial-gradient(60vw 44vw at 50% -10%, color-mix(in oklab, var(--accent, #5b6cf5) 40%, transparent), transparent 70%),
+    radial-gradient(48vw 36vw at 88% 110%, color-mix(in oklab, var(--accent, #5b6cf5) 22%, transparent), transparent 68%);
+}
+
+/* Enable switch: motion full AND performance off — no disable rules are
+   needed because the base state has no animation (selector match = on). */
+[data-decor="aurora"][data-motion="full"][data-performance="off"] body::before {
+  animation: decorAuroraDrift 28s ease-in-out infinite alternate;
+}
+
+@keyframes decorAuroraDrift {
+  from { background-position: 0% 0%; }
+  to   { background-position: 100% 100%; }
+}
+
+/* OS-level reduced motion beats the app preference (same specificity as
+   the enable rule + later in the file → wins). */
+@media (prefers-reduced-motion: reduce) {
+  [data-decor="aurora"][data-motion="full"][data-performance="off"] body::before {
+    animation: none;
+  }
+}
+
+/* ===== Glass Surface Classes ===== */
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  border-radius: 16px;
+}
+
+.glass-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-lg), var(--glass-highlight);
+  border-radius: 16px;
+}
+
+.glass-subtle {
+  background: var(--glass-bg-subtle);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  border: 1px solid var(--glass-border-subtle);
+  box-shadow: var(--glass-shadow);
+  border-radius: 12px;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow), var(--glass-highlight);
+  border-radius: 16px;
+  transition: transform 0.25s var(--ease-smooth),
+              box-shadow 0.25s var(--ease-smooth),
+              background 0.25s var(--ease-smooth);
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-hover);
+  box-shadow: var(--glass-shadow-lg), var(--glass-highlight);
+  transform: translateY(-2px);
+}
+
+/* ===== Specular Highlight Pseudo-Elements ===== */
+
+.glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    var(--specular-overlay) 0%,
+    transparent 40%,
+    transparent 60%,
+    var(--specular-subtle) 100%
+  );
+  pointer-events: none;
+}
+
+/* ===== Glass Button ===== */
+
+.glass-btn {
+  background: var(--btn-bg);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--btn-border);
+  box-shadow: var(--btn-shadow), var(--btn-highlight);
+  border-radius: 12px;
+  color: var(--btn-text) !important;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-spring);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-btn:hover {
+  background: var(--btn-bg-hover);
+  transform: scale(1.02);
+}
+
+.glass-btn:active {
+  transform: scale(0.98);
+  transition-duration: 0.1s;
+}
+
+.glass-btn-primary {
+  background: rgba(59, 130, 246, 0.50);
+  border-color: rgba(96, 165, 250, 0.50);
+  box-shadow: 0 2px 16px rgba(59, 130, 246, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.30);
+  color: white;
+}
+
+[data-brightness="light"] .glass-btn-primary {
+  background: rgba(37, 99, 235, 0.80);
+  border-color: rgba(59, 130, 246, 0.50);
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.30);
+}
+
+.glass-btn-primary:hover {
+  background: rgba(59, 130, 246, 0.65);
+  box-shadow: 0 4px 24px rgba(59, 130, 246, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.40);
+}
+
+[data-brightness="light"] .glass-btn-primary:hover {
+  background: rgba(37, 99, 235, 0.90);
+}
+
+.glass-btn-danger {
+  background: rgba(239, 68, 68, 0.40);
+  border-color: rgba(248, 113, 113, 0.40);
+  box-shadow: 0 2px 16px rgba(239, 68, 68, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  color: white;
+}
+
+[data-brightness="light"] .glass-btn-danger {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.25);
+  color: #991b1b;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.10);
+}
+
+.glass-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.55);
+}
+
+.glass-btn-indigo {
+  background: rgba(99, 102, 241, 0.50);
+  border-color: rgba(129, 140, 248, 0.50);
+  box-shadow: 0 2px 16px rgba(99, 102, 241, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.30);
+  color: white;
+}
+
+[data-brightness="light"] .glass-btn-indigo {
+  background: rgba(79, 70, 229, 0.75);
+  border-color: rgba(99, 102, 241, 0.40);
+  color: white;
+}
+
+.glass-btn-indigo:hover {
+  background: rgba(99, 102, 241, 0.65);
+}
+
+/* ===== Glass Input ===== */
+
+.glass-input {
+  background: var(--input-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  color: var(--input-text) !important;
+  padding: 10px 14px;
+  font-size: 14px;
+  transition: all 0.25s var(--ease-smooth);
+  outline: none;
+  width: 100%;
+}
+
+.glass-input option {
+  background: var(--input-option-bg) !important;
+  color: var(--input-text) !important;
+}
+
+.glass-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.glass-input:focus {
+  background: var(--input-bg-focus);
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.glass-input:hover:not(:focus) {
+  border-color: var(--glass-border);
+}
+
+/* Select variant */
+.glass-select {
+  background: var(--input-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--input-border);
+  border-radius: 10px;
+  color: var(--input-text) !important;
+  padding: 10px 14px;
+  font-size: 14px;
+  transition: all 0.25s var(--ease-smooth);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  cursor: pointer;
+}
+
+.glass-select option {
+  background: var(--input-option-bg);
+  color: var(--input-text) !important;
+}
+
+.glass-select:focus {
+  background: var(--input-bg-focus);
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* ===== Glass Badge ===== */
+
+.glass-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.glass-badge-green  { background: var(--badge-green-bg);  color: var(--badge-green-text);  border-color: rgba(34, 197, 94, 0.25); }
+.glass-badge-blue   { background: var(--badge-blue-bg);   color: var(--badge-blue-text);   border-color: rgba(59, 130, 246, 0.25); }
+.glass-badge-red    { background: var(--badge-red-bg);    color: var(--badge-red-text);    border-color: rgba(239, 68, 68, 0.25); }
+.glass-badge-purple { background: var(--badge-purple-bg); color: var(--badge-purple-text); border-color: rgba(168, 85, 247, 0.25); }
+.glass-badge-amber  { background: var(--badge-amber-bg);  color: var(--badge-amber-text);  border-color: rgba(245, 158, 11, 0.25); }
+.glass-badge-orange { background: var(--badge-orange-bg); color: var(--badge-orange-text); border-color: rgba(249, 115, 22, 0.25); }
+.glass-badge-gray   { background: var(--badge-gray-bg);   color: var(--badge-gray-text);   border-color: rgba(156, 163, 175, 0.20); }
+
+/* ===== Glass Table ===== */
+
+.glass-table thead tr {
+  background: var(--table-header-bg);
+  border-bottom: 1px solid var(--glass-border-subtle);
+}
+
+.glass-table thead th {
+  color: var(--table-header-text);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 14px 16px;
+}
+
+/* Phones: tighter cell padding — 16px side padding × every column is the
+   single biggest driver of table scroll width on small screens. */
+@media (max-width: 767px) {
+  .glass-table thead th { padding: 10px 8px; }
+  .glass-table td { padding: 10px 8px; }
+}
+
+.glass-table tbody tr {
+  border-bottom: 1px solid var(--table-row-border);
+  transition: background 0.2s ease;
+}
+
+.glass-table tbody tr:hover {
+  background: var(--table-row-hover);
+}
+
+.glass-table td {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--table-cell);
+}
+
+/* ===== Glass Modal / Backdrop ===== */
+
+.glass-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: backdropIn 0.25s ease-out;
+}
+
+[data-brightness="light"] .glass-backdrop {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glassIn {
+  from { opacity: 0; transform: scale(0.92) translateY(16px) blur(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0) blur(0); }
+}
+
+.animate-glass-in {
+  animation: glassIn 0.4s var(--ease-spring) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-glass-in,
+  .animate-float,
+  .animate-slide-up,
+  .glass-shimmer,
+  .animate-glow-pulse,
+  .page-enter {
+    animation: none;
+  }
+}
+
+/* ===== P2: Density / Motion / Performance preferences (PLAN.MD §13) =====
+   Applied by src/config/applyPreferences.js as data-* attributes on <html>.
+   Attribute-driven so components never read preferences directly — they sit
+   inside token CSS like the rest of the design system. */
+
+/* Density — scales the spacing/height tokens the shared table + card rules
+   read. Only the token values change here; per-component paddings opt in by
+   using the var()s (DataTable uses --table-cell-py/--table-cell-px). */
+:root {
+  --table-cell-py: 12px;
+  --table-cell-px: 16px;
+  --control-radius: 12px;
+  --form-gap: 16px;
+}
+
+[data-density="compact"] {
+  --table-cell-py: 8px;
+  --table-cell-px: 12px;
+  --control-radius: 10px;
+  --form-gap: 10px;
+}
+
+[data-density="spacious"] {
+  --table-cell-py: 16px;
+  --table-cell-px: 20px;
+  --control-radius: 16px;
+  --form-gap: 22px;
+}
+
+.glass-table td {
+  padding: var(--table-cell-py) var(--table-cell-px);
+}
+
+/* Font scale — html font-size shift cascades through every rem-based
+   Tailwind utility; px values (legacy bits) are unaffected. Set by JS as an
+   inline style (85–125%), not a class, so no CSS needed here. */
+
+/* Motion — 'reduced' keeps opacity transitions but stops movement/looping;
+   'off' kills animation outright (superset of the media query above). */
+[data-motion="reduced"] .animate-float,
+[data-motion="reduced"] .animate-glow-pulse,
+[data-motion="reduced"] .glass-shimmer,
+[data-motion="reduced"] .animate-ping-slow {
+  animation: none !important;
+}
+
+[data-motion="reduced"] .animate-glass-in,
+[data-motion="reduced"] .animate-slide-up,
+[data-motion="reduced"] .page-enter {
+  animation-duration: 0.01s !important;
+  transition-duration: 0.01s !important;
+}
+
+[data-motion="off"] *,
+[data-motion="off"] *::before,
+[data-motion="off"] *::after {
+  animation-duration: 0.01s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01s !important;
+  scroll-behavior: auto !important;
+}
+
+/* Performance mode — drop the expensive backdrop-filter/blur stack and heavy
+   shadows. Solid surfaces replace glass: contrast is preserved via the same
+   tokens' opaque fallbacks. Targets ONLY the effects; layout untouched. */
+[data-performance="on"] .glass,
+[data-performance="on"] .glass-strong,
+[data-performance="on"] .glass-card,
+[data-performance="on"] .glass-subtle,
+[data-performance="on"] .glass-sidebar,
+[data-performance="on"] .glass-modal,
+[data-performance="on"] .glass-btn,
+[data-performance="on"] .glass-input,
+[data-performance="on"] .glass-select,
+[data-performance="on"] .glass-badge,
+[data-performance="on"] .glass-backdrop,
+[data-performance="on"] .glass-scroll-fade {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-performance="on"] .glass,
+[data-performance="on"] .glass-strong,
+[data-performance="on"] .glass-card,
+[data-performance="on"] .glass-sidebar,
+[data-performance="on"] .glass-modal {
+  background-color: rgba(24, 24, 46, 0.96) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20) !important;
+}
+
+[data-brightness="light"][data-performance="on"] .glass,
+[data-brightness="light"][data-performance="on"] .glass-strong,
+[data-brightness="light"][data-performance="on"] .glass-card,
+[data-brightness="light"][data-performance="on"] .glass-sidebar,
+[data-brightness="light"][data-performance="on"] .glass-modal {
+  background-color: rgba(248, 248, 252, 0.97) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-performance="on"] .glass-shine::after,
+[data-performance="on"] .glass-modal::after {
+  display: none !important;
+}
+
+[data-performance="on"] .animate-float,
+[data-performance="on"] .glass-shimmer,
+[data-performance="on"] .animate-glow-pulse {
+  animation: none !important;
+}
+
+/* ===== ACCESSIBILITY (PLAN.MD §13 P3) =====
+   Three opt-in toggles driven by the preferences registry appliers.
+   Reduced transparency maps onto the SAME glass tokens performance mode
+   hardens — but it keeps blur on the backdrop (legibility without
+   translucency), unlike performance mode which drops the blur entirely. */
+
+/* Reduced transparency — solid surfaces, but keep depth cues */
+[data-reduced-transparency="on"] .glass,
+[data-reduced-transparency="on"] .glass-strong,
+[data-reduced-transparency="on"] .glass-card,
+[data-reduced-transparency="on"] .glass-subtle,
+[data-reduced-transparency="on"] .glass-sidebar,
+[data-reduced-transparency="on"] .glass-modal,
+[data-reduced-transparency="on"] .glass-btn,
+[data-reduced-transparency="on"] .glass-input,
+[data-reduced-transparency="on"] .glass-select,
+[data-reduced-transparency="on"] .glass-badge {
+  backdrop-filter: blur(8px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+}
+
+[data-reduced-transparency="on"] .glass,
+[data-reduced-transparency="on"] .glass-strong,
+[data-reduced-transparency="on"] .glass-card,
+[data-reduced-transparency="on"] .glass-sidebar,
+[data-reduced-transparency="on"] .glass-modal {
+  background-color: rgba(24, 24, 46, 0.92) !important;
+}
+
+[data-brightness="light"][data-reduced-transparency="on"] .glass,
+[data-brightness="light"][data-reduced-transparency="on"] .glass-strong,
+[data-brightness="light"][data-reduced-transparency="on"] .glass-card,
+[data-brightness="light"][data-reduced-transparency="on"] .glass-sidebar,
+[data-brightness="light"][data-reduced-transparency="on"] .glass-modal {
+  background-color: rgba(248, 248, 252, 0.94) !important;
+}
+
+/* Always-visible focus rings — never hide the keyboard caret position */
+[data-focus-rings="on"] *:focus {
+  outline: 2px solid var(--focus-ring, rgba(59, 130, 246, 0.60)) !important;
+  outline-offset: 2px !important;
+}
+[data-focus-rings="on"] *:focus:not(:focus-visible) {
+  outline: 2px solid var(--focus-ring, rgba(59, 130, 246, 0.60)) !important;
+}
+
+/* Larger touch targets — minimum comfortable hit area on every action */
+[data-touch-targets="on"] button,
+[data-touch-targets="on"] [role="button"],
+[data-touch-targets="on"] input[type="checkbox"],
+[data-touch-targets="on"] a {
+  min-height: 44px;
+  min-width: 44px;
+}
+[data-touch-targets="on"] input[type="checkbox"] {
+  width: 44px;
+  height: 44px;
+}
+
+.glass-modal {
+  background: var(--modal-bg);
+  backdrop-filter: var(--glass-blur-heavy);
+  -webkit-backdrop-filter: var(--glass-blur-heavy);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-xl), var(--glass-highlight);
+  border-radius: 20px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: modalIn 0.35s var(--ease-spring);
+  position: relative;
+}
+
+.glass-modal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    var(--modal-specular) 0%,
+    transparent 40%,
+    transparent 70%,
+    var(--specular-subtle) 100%
+  );
+  pointer-events: none;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ===== Glass Sidebar ===== */
+
+.glass-sidebar {
+  background: var(--sidebar-bg);
+  backdrop-filter: var(--sidebar-blur);
+  -webkit-backdrop-filter: var(--sidebar-blur);
+  border-right: 1px solid var(--glass-border-subtle);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+}
+
+.glass-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sidebar-text);
+  transition: all 0.2s var(--ease-smooth);
+  position: relative;
+  text-decoration: none;
+}
+
+.glass-nav-item:hover {
+  background: var(--nav-hover);
+  color: var(--sidebar-text-active);
+}
+
+.glass-nav-item.active {
+  background: var(--nav-active-bg);
+  color: var(--sidebar-text-active);
+  border: 1px solid var(--nav-active-border);
+}
+
+[data-brightness="light"] .glass-sidebar {
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06);
+}
+
+[data-brightness="light"] .glass-nav-item.active {
+  box-shadow: none;
+}
+
+/* ===== Animations ===== */
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: pageIn 0.4s var(--ease-smooth);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.glass-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--specular-subtle) 25%,
+    var(--specular-overlay) 50%,
+    var(--specular-subtle) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.30); }
+  50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.50); }
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s var(--ease-spring);
+}
+
+@keyframes highlightFade {
+  0% { box-shadow: inset 0 0 0 2px rgba(251, 191, 36, 0.7), 0 0 16px rgba(251, 191, 36, 0.25); background-color: rgba(251, 191, 36, 0.08); }
+  70% { box-shadow: inset 0 0 0 2px rgba(251, 191, 36, 0.4), 0 0 8px rgba(251, 191, 36, 0.1); background-color: rgba(251, 191, 36, 0.04); }
+  100% { box-shadow: none; background-color: transparent; }
+}
+
+.animate-row-highlight {
+  animation: highlightFade 5s ease-out forwards;
+  border-radius: 8px;
+}
+
+/* ===== Scrollbar — GLOBAL (every scrollable element, both engines) =====
+   Replaces the old opt-in `.custom-scrollbar` class, which half the app
+   forgot to add — and which only ever set a WIDTH, so horizontal table/
+   kanban scrollers and Firefox all kept the chunky OS bar. One layer, no
+   per-component class to remember:
+   - WebKit: slim 6px thumb in BOTH axes, colored from --scrollbar-*.
+   - Firefox (any engine without WebKit scrollbar pseudos): scrollbar-width /
+     scrollbar-color are INHERITED properties, so declaring them once on
+     :root styles every scroller — including ones no one added a class to.
+     The @supports guard keeps Chromium on its (more detailed) WebKit layer.
+   - Colors are derived (see the :root tokens): each theme's thumb comes from
+     that theme's own text palette, so every preset matches for free. */
+@supports not selector(::-webkit-scrollbar) {
+  :root {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px; /* horizontal scrollers match */
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ===== Glass ScrollArea (src/components/glass/ScrollArea.jsx) =====
+   The shared scroll container's LOOK comes from the global scrollbar layer
+   above; per-container it adds only what must be per-container: a reserved
+   gutter so content appearing/disappearing never shifts layout, and
+   overscroll containment so a modal body can't chain-scroll the page behind
+   it. */
+.glass-scrollarea {
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+
+/* Edge shadows — frosted strips pinned to the ScrollArea wrapper (they must
+   NOT scroll with content). Blur what's sliding under the edge, fade the
+   strip itself out through the mask, and only ever transition opacity —
+   which the motion preferences deliberately keep alive. */
+.glass-scroll-fade {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-smooth);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.glass-scroll-fade--top {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: linear-gradient(to bottom, var(--glass-bg-strong), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent);
+  mask-image: linear-gradient(to bottom, #000 30%, transparent);
+}
+
+.glass-scroll-fade--bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: linear-gradient(to top, var(--glass-bg-strong), transparent);
+  -webkit-mask-image: linear-gradient(to top, #000 30%, transparent);
+  mask-image: linear-gradient(to top, #000 30%, transparent);
+}
+
+.glass-scroll-fade--left {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 20px;
+  background: linear-gradient(to right, var(--glass-bg-strong), transparent);
+  -webkit-mask-image: linear-gradient(to right, #000 30%, transparent);
+  mask-image: linear-gradient(to right, #000 30%, transparent);
+}
+
+.glass-scroll-fade--right {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  background: linear-gradient(to left, var(--glass-bg-strong), transparent);
+  -webkit-mask-image: linear-gradient(to left, #000 30%, transparent);
+  mask-image: linear-gradient(to left, #000 30%, transparent);
+}
+
+/* ===== Focus Visible for Accessibility ===== */
+
+*:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ===== Text utilities ===== */
+
+.text-glass { color: var(--text-on-glass); }
+.text-glass-secondary { color: var(--text-on-glass-secondary); }
+.text-glass-muted { color: var(--text-on-glass-muted); }
+
+.text-glow {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.40);
+}
+
+[data-brightness="light"] .text-glow {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.50);
+}
+
+/* ===== Checkbox styling ===== */
+
+input[type="checkbox"] {
+  /* --accent is set inline by the accent pref (pre-paint + appliers) and
+     falls back to the original blue when absent. */
+  accent-color: var(--accent, #3b82f6);
+}
+
+/* ===== Theme toggle ===== */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--sidebar-text);
+  background: var(--nav-hover);
+  border: 1px solid var(--glass-border-subtle);
+  cursor: pointer;
+  transition: all 0.2s var(--ease-smooth);
+  white-space: nowrap;
+}
+
+.theme-toggle:hover {
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text-active);
+}
+
+/* ===== Utility: dynamic text color classes for components ===== */
+
+.tw-text-heading { color: var(--text-heading) !important; }
+.tw-text-body { color: var(--text-body) !important; }
+.tw-text-label { color: var(--text-label) !important; }
+
+/* Theme-aware text replacements (auto-adapt dark/light) */
+.tt { color: var(--text-heading) !important; }
+.tt-sec { color: var(--text-on-glass-secondary) !important; }
+.tt-muted { color: var(--text-on-glass-muted) !important; }
+.tt-label { color: var(--text-label) !important; }
+
+/* ===== Light Mode: Override hardcoded Tailwind text-white utilities ===== */
+
+[data-brightness="light"] .text-white { color: var(--text-heading) !important; }
+[data-brightness="light"] .text-glow { text-shadow: 0 1px 2px rgba(255, 255, 255, 0.50) !important; }
+
+/* text-white/* opacity variants */
+[data-brightness="light"] .text-white\/95,
+[data-brightness="light"] .text-white\/90 { color: var(--text-on-glass) !important; }
+[data-brightness="light"] .text-white\/85,
+[data-brightness="light"] .text-white\/80,
+[data-brightness="light"] .text-white\/75,
+[data-brightness="light"] .text-white\/70 { color: var(--text-on-glass-secondary) !important; }
+[data-brightness="light"] .text-white\/65,
+[data-brightness="light"] .text-white\/60,
+[data-brightness="light"] .text-white\/55,
+[data-brightness="light"] .text-white\/50 { color: var(--text-label) !important; }
+[data-brightness="light"] .text-white\/45,
+[data-brightness="light"] .text-white\/40 { color: var(--text-on-glass-muted) !important; }
+[data-brightness="light"] .text-white\/35,
+[data-brightness="light"] .text-white\/30 { color: rgba(20, 20, 40, 0.30) !important; }
+[data-brightness="light"] .text-white\/25,
+[data-brightness="light"] .text-white\/20 { color: rgba(20, 20, 40, 0.25) !important; }
+[data-brightness="light"] .text-white\/15,
+[data-brightness="light"] .text-white\/10 { color: rgba(20, 20, 40, 0.15) !important; }
+
+/* Light mode: override bg-white/5 etc used on cards */
+[data-brightness="light"] .bg-white\/5 { background-color: rgba(0, 0, 0, 0.03) !important; }
+[data-brightness="light"] .bg-white\/\[0\.02\] { background-color: rgba(0, 0, 0, 0.015) !important; }
+
+/* Light mode: override border-white/* on dividers */
+[data-brightness="light"] .border-white\/8 { border-color: rgba(0, 0, 0, 0.08) !important; }
+[data-brightness="light"] .border-white\/5 { border-color: rgba(0, 0, 0, 0.06) !important; }
+[data-brightness="light"] .border-white\/10 { border-color: rgba(0, 0, 0, 0.08) !important; }
+[data-brightness="light"] .border-white\/15 { border-color: rgba(0, 0, 0, 0.10) !important; }
+[data-brightness="light"] .border-white\/20 { border-color: rgba(0, 0, 0, 0.10) !important; }
+
+/* Light mode: override divide-white/5 */
+[data-brightness="light"] .divide-white\/5 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Light mode: modal backdrop */
+[data-brightness="light"] .bg-black\/35 { background-color: rgba(0, 0, 0, 0.12) !important; }
+[data-brightness="light"] .bg-black\/40 { background-color: rgba(0, 0, 0, 0.15) !important; }
+[data-brightness="light"] .bg-black\/50 { background-color: rgba(0, 0, 0, 0.18) !important; }
+[data-brightness="light"] .bg-black\/60 { background-color: rgba(0, 0, 0, 0.20) !important; }
+[data-brightness="light"] .bg-black\/90 { background-color: rgba(0, 0, 0, 0.25) !important; }
+[data-brightness="light"] .bg-black\/95 { background-color: rgba(0, 0, 0, 0.30) !important; }
+
+/* Light mode: gradient icon containers — use darker tints.
+   ── Semantic-token selector note (2026-10-07 palette sweep) ──
+   Every chromatic rule below used to key off a literal Tailwind palette
+   class (`.from-indigo-500\/30`, `.text-amber-400`, …). src/ no longer
+   names palette classes (doctor check #18), so these selectors are the
+   CSS-escaped form of the semantic arbitrary-value classes:
+   `from-[color:var(--ui-indigo-strong)]/30` → .from-\[color\:var\(--ui-indigo-strong\)\]\/30
+   Where the sweep merged hues into one token (orange→amber, green→emerald,
+   200→-hi tier), the family representative's value wins — marked inline. */
+[data-brightness="light"] .from-\[color\:var\(--ui-indigo-strong\)\]\/30 { --tw-gradient-from: rgba(79, 70, 229, 0.15) !important; }
+[data-brightness="light"] .to-\[color\:var\(--ui-indigo-strong\)\]\/20 { --tw-gradient-to: rgba(79, 70, 229, 0.08) !important; }
+[data-brightness="light"] .from-\[color\:var\(--ui-purple-strong\)\]\/30 { --tw-gradient-from: rgba(168, 85, 247, 0.15) !important; }
+[data-brightness="light"] .to-\[color\:var\(--ui-purple-strong\)\]\/20 { --tw-gradient-to: rgba(168, 85, 247, 0.08) !important; }
+[data-brightness="light"] .from-\[color\:var\(--status-info-strong\)\]\/30 { --tw-gradient-from: rgba(59, 130, 246, 0.15) !important; }
+[data-brightness="light"] .to-\[color\:var\(--status-info-strong\)\]\/20 { --tw-gradient-to: rgba(59, 130, 246, 0.08) !important; }
+[data-brightness="light"] .from-\[color\:var\(--status-success-strong\)\]\/30 { --tw-gradient-from: rgba(16, 185, 129, 0.15) !important; }
+[data-brightness="light"] .to-\[color\:var\(--status-success-strong\)\]\/20 { --tw-gradient-to: rgba(16, 185, 129, 0.08) !important; }
+[data-brightness="light"] .from-\[color\:var\(--status-warning-strong\)\]\/30 { --tw-gradient-from: rgba(249, 115, 22, 0.15) !important; } /* was from-orange-500 */
+[data-brightness="light"] .to-\[color\:var\(--status-warning-strong\)\]\/20 { --tw-gradient-to: rgba(249, 115, 22, 0.08) !important; } /* was to-orange-500 */
+[data-brightness="light"] .from-\[color\:var\(--ui-cyan-strong\)\]\/20 { --tw-gradient-to: rgba(6, 182, 212, 0.08) !important; }
+
+/* Light mode: shadow adjustments for glass cards */
+[data-brightness="light"] .shadow-sm { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important; }
+[data-brightness="light"] .shadow-lg { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important; }
+[data-brightness="light"] .shadow-2xl { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.10) !important; }
+
+/* Light mode: shadow-blue-500/25 → muted (was already unused in src; kept in semantic form) */
+[data-brightness="light"] .shadow-\[color\:var\(--status-info-strong\)\]\/25 { box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12) !important; }
+
+/* Light mode: select option dark background */
+[data-brightness="light"] .glass-select option { background: #ffffff; }
+
+/* Light mode: checkbox */
+[data-brightness="light"] input[type="checkbox"] { accent-color: var(--accent, #2563eb); }
+
+/* Light mode: subtle variant adjust */
+[data-brightness="light"] .glass-subtle {
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ===== Light Mode: Override light-on-dark colored nav link text =====
+   (semantic selectors — see the sweep note in the gradient block above) */
+[data-brightness="light"] .text-\[color\:var\(--ui-cyan-hi\)\] { color: #0891b2 !important; }
+[data-brightness="light"] .text-\[color\:var\(--ui-violet-hi\)\] { color: #7c3aed !important; }
+[data-brightness="light"] .text-\[color\:var\(--ui-indigo-hi\)\] { color: #4f46e5 !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-success\)\] { color: #059669 !important; } /* was emerald-400; green-400 (#16a34a) merges here */
+[data-brightness="light"] .text-\[color\:var\(--ui-sky-hi\)\] { color: #0284c7 !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-info-hi\)\] { color: #2563eb !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-info\)\] { color: #2563eb !important; }
+[data-brightness="light"] .text-\[color\:var\(--ui-purple-hi\)\] { color: #7c3aed !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-danger-hi\)\] { color: #dc2626 !important; } /* was red-300; red-200 (#b91c1c) merges here */
+[data-brightness="light"] .text-\[color\:var\(--status-danger\)\] { color: #dc2626 !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-warning-hi\)\] { color: #b45309 !important; } /* amber-300 wins: orange-300/200 + amber-200 merge here */
+[data-brightness="light"] .text-\[color\:var\(--status-warning\)\] { color: #b45309 !important; } /* amber-400 wins: orange-400 merges here */
+[data-brightness="light"] .text-\[color\:var\(--ui-indigo\)\] { color: #4338ca !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-success-hi\)\] { color: #059669 !important; } /* emerald-300 wins: emerald-200 (#047857) merges here */
+[data-brightness="light"] .text-\[color\:var\(--ui-purple\)\] { color: #7c3aed !important; }
+[data-brightness="light"] .text-\[color\:var\(--ui-neutral-strong\)\] { color: #6b7280 !important; }
+
+/* Light mode: opacity variants of accent colors */
+[data-brightness="light"] .text-\[color\:var\(--status-danger\)\]\/80 { color: rgba(220, 38, 38, 0.85) !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-danger\)\]\/70 { color: rgba(220, 38, 38, 0.80) !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-danger\)\]\/60 { color: rgba(220, 38, 38, 0.75) !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-danger\)\]\/50 { color: rgba(220, 38, 38, 0.70) !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-success\)\]\/80 { color: rgba(22, 163, 74, 0.85) !important; } /* was green-400 */
+[data-brightness="light"] .text-\[color\:var\(--status-success\)\]\/70 { color: rgba(5, 150, 105, 0.80) !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-success\)\]\/60 { color: rgba(5, 150, 105, 0.75) !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-warning\)\]\/60 { color: rgba(180, 83, 9, 0.75) !important; }
+[data-brightness="light"] .text-\[color\:var\(--status-warning-hi\)\]\/80 { color: rgba(217, 119, 6, 0.85) !important; } /* amber-300/80 wins: orange-200/80 merges here */
+
+/* Light mode: gradient colored icon containers */
+[data-brightness="light"] .bg-\[color\:var\(--status-info-strong\)\]\/20 { background-color: rgba(37, 99, 235, 0.10) !important; }
+[data-brightness="light"] .bg-\[color\:var\(--ui-indigo-strong\)\]\/20 { background-color: rgba(79, 70, 229, 0.10) !important; }
+[data-brightness="light"] .bg-\[color\:var\(--status-danger-strong\)\]\/20 { background-color: rgba(220, 38, 38, 0.08) !important; }
+[data-brightness="light"] .bg-\[color\:var\(--status-warning-strong\)\]\/20 { background-color: rgba(180, 83, 9, 0.08) !important; }
+[data-brightness="light"] .bg-\[color\:var\(--status-warning-strong\)\]\/10 { background-color: rgba(194, 65, 12, 0.06) !important; } /* was bg-orange-500/10 */
+[data-brightness="light"] .bg-\[color\:var\(--status-info-strong\)\]\/15 { background-color: rgba(37, 99, 235, 0.08) !important; }
+[data-brightness="light"] .bg-\[color\:var\(--ui-indigo\)\]\/25 { background-color: rgba(99, 102, 241, 0.10) !important; }
+[data-brightness="light"] .bg-\[color\:var\(--ui-indigo-strong\)\]\/10 { background-color: rgba(79, 70, 229, 0.06) !important; }
+
+/* Light mode: border colored */
+[data-brightness="light"] .border-\[color\:var\(--status-info\)\]\/20 { border-color: rgba(37, 99, 235, 0.15) !important; }
+[data-brightness="light"] .border-\[color\:var\(--status-info\)\]\/30 { border-color: rgba(37, 99, 235, 0.20) !important; }
+[data-brightness="light"] .border-\[color\:var\(--ui-indigo\)\]\/20 { border-color: rgba(99, 102, 241, 0.15) !important; }
+[data-brightness="light"] .border-\[color\:var\(--ui-indigo\)\]\/25 { border-color: rgba(99, 102, 241, 0.15) !important; }
+[data-brightness="light"] .border-\[color\:var\(--status-warning\)\]\/20 { border-color: rgba(180, 83, 9, 0.15) !important; }
+[data-brightness="light"] .border-\[color\:var\(--status-warning\)\]\/30 { border-color: rgba(180, 83, 9, 0.20) !important; }
+[data-brightness="light"] .border-\[color\:var\(--status-danger\)\]\/20 { border-color: rgba(220, 38, 38, 0.15) !important; }
+[data-brightness="light"] .border-\[color\:var\(--status-danger-strong\)\]\/50 { border-color: rgba(220, 38, 38, 0.25) !important; }
+[data-brightness="light"] .border-\[color\:var\(--status-success-strong\)\]\/50 { border-color: rgba(5, 150, 105, 0.25) !important; }
+
+/* Light mode: bg-[rgba(...)] custom inline colors on modals/panels */
+[data-brightness="light"] [style*="rgba(20, 20, 40"] {
+  background-color: rgba(240, 240, 248, 0.85) !important;
+  color: var(--text-heading) !important;
+}
+
+/* Light mode: Login/ForcePasswordChange body backgrounds */
+[data-brightness="light"] .min-h-screen {
+  color: var(--text-heading);
+}
+
+/* Light mode: inline style color overrides for elements with style prop */
+[data-brightness="light"] [style*="color: white"] { color: var(--text-heading) !important; }
+[data-brightness="light"] [style*="color: rgba(255"] { color: var(--text-heading) !important; }
+
+/* ===== QR Asset Tag — Print Label ===== */
+
+.qr-print-container { display: none; }
+
+.qr-print-label {
+  width: 320px;
+  border: 2px solid #1a1a2e;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  color: #1a1a2e;
+  font-family: 'Inter', 'SF Pro Display', -apple-system, system-ui, sans-serif;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+.qr-print-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-print-brand {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.qr-print-qr-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 20px 20px 12px;
+}
+
+.qr-print-qr-wrap--large {
+  padding: 28px 28px 16px;
+}
+
+.qr-print-id {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #1a1a2e;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  padding: 0 16px 4px;
+}
+
+.qr-print-id--large {
+  font-size: 22px;
+  padding: 0 20px 6px;
+}
+
+.qr-print-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 20px;
+}
+
+.qr-print-divider span:first-child,
+.qr-print-divider span:last-child {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: repeating-linear-gradient(90deg, #ccc 0, #ccc 3px, transparent 3px, transparent 6px);
+}
+
+.qr-print-divider-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #0f3460;
+  flex-shrink: 0;
+}
+
+.qr-print-model {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #666;
+  padding: 2px 16px 10px;
+}
+
+.qr-print-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  background: #f8f8fc;
+  border-top: 1px solid #e8e8f0;
+  font-size: 9px;
+  font-weight: 500;
+  color: #999;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.qr-print-date {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Print media: show ONLY the label, hide everything else ── */
+@media print {
+  @page {
+    size: auto;
+    margin: 12mm;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  .qr-print-container,
+  .qr-print-container * {
+    visibility: visible !important;
+  }
+
+  .qr-print-container {
+    display: flex !important;
+    justify-content: center;
+    align-items: flex-start;
+    position: static;
+    background: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .qr-print-label--paper {
+    box-shadow: none;
+    border: 2.5px solid #1a1a2e;
+    margin: 0 auto;
+  }
+}

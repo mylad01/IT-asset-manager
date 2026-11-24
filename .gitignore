@@ -1,0 +1,43 @@
+# ── Environment Secrets ──
+# .env holds JWT_SECRET and local tuning. Every variant is ignored — a
+# bare `.env` pattern would leave a renamed copy (.env.backup) committable.
+# .env.example stays tracked as the template.
+# NOTE: git does not support trailing comments after patterns, so every
+# comment here lives on its own line.
+.env
+.env.*
+!.env.example
+
+# ── Dependencies / Build / Local Data ──
+/node_modules/
+/dist/
+/database.sqlite*
+/database.loadtest.sqlite*
+# Hard-move archive DB — contains full message bodies of archived
+# conversations. Derived from the main DB filename, hence the wildcard.
+/database-conversations-archive.sqlite*
+/uploads/
+/.freebuff/
+
+# ── Timestamped archive zips ──
+# backups/ holds zip dumps of conversations and the full DB — never commit.
+/backups/
+# Delivery archive produced by `npm run clean:delivery` (full project zip —
+# bulky and fully reproducible from a clean tree).
+/delivery/
+
+# ── Runtime Directories ──
+# Load test runtime artifacts (temp databases, generated data)
+/scripts/loadTests/.runtime/
+# Scratch runtime for QA probes/benchmarks (scratch DBs, run logs, locks).
+# Keep-forever evidence (bench-archive.mjs etc.) should live outside this dir.
+/scripts/.runtime/
+
+# ── Log Files ──
+# Application logs — managed by pino-roll (daily rotation, 30-day retention).
+# Contains: app.log, error.log, .app.lock (PID lock file)
+/logs/
+
+# ── PM2 Internal State ──
+# PM2 daemon internal state — process list, PID files, RPC sockets
+.pm2/

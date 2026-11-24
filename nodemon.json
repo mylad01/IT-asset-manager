@@ -1,0 +1,11 @@
+{
+  "watch": ["server"],
+  "ext": "js",
+  "ignore": [
+    "*.sqlite",
+    "*.sqlite-*",
+    "database.sqlite",
+    "database.sqlite-*",
+    "uploads/*"
+  ]
+}
