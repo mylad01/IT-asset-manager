@@ -1,6 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Monitor, History, Package, Box, Tags, ArchiveRestore, ScanBarcode, UserCheck, LogOut, ShieldAlert, MonitorPlay, LifeBuoy, Wrench, Sun, Moon, Settings, CalendarDays, MessageSquare } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Monitor,
+  History,
+  Package,
+  Box,
+  Tags,
+  ArchiveRestore,
+  ScanBarcode,
+  UserCheck,
+  LogOut,
+  ShieldAlert,
+  MonitorPlay,
+  LifeBuoy,
+  Wrench,
+  Sun,
+  Moon,
+  Settings,
+  CalendarDays,
+  MessageSquare,
+  ChevronDown,
+  ChevronRight,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNotifications } from '../hooks/useNotifications';
@@ -8,6 +30,75 @@ import NotificationBell from './NotificationBell';
 import NotificationLeaveIcon from './NotificationLeaveIcon';
 import WidgetErrorBoundary from './error-boundaries/WidgetErrorBoundary';
 import api from '../utils/apiClient';
+
+const OPERATIONS_ROUTES = ['/', '/calendar', '/my-assets', '/my-tickets', '/leave', '/leave-approvals', '/scan'];
+const INVENTORY_ROUTES = ['/helpdesk', '/conversations', '/assets', '/user-assets', '/storage', '/kits', '/consumables', '/types'];
+const ADMIN_ROUTES = ['/users-admin', '/activity', '/settings'];
+
+const isRouteInGroup = (routes, pathname) =>
+  routes.some((r) => (r === '/' ? pathname === '/' : pathname === r || pathname.startsWith(r + '/')));
+
+function hasVisibleChildren(children) {
+  let hasChildren = false;
+  React.Children.forEach(children, (child) => {
+    if (child === null || child === undefined || child === false || child === true || child === '') return;
+    if (React.isValidElement(child)) {
+      if (child.type === React.Fragment) {
+        if (hasVisibleChildren(child.props.children)) {
+          hasChildren = true;
+        }
+      } else {
+        hasChildren = true;
+      }
+    } else {
+      hasChildren = true;
+    }
+  });
+  return hasChildren;
+}
+
+function NavGroup({ label, icon: Icon, children, defaultOpen = false }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  useEffect(() => {
+    if (defaultOpen) {
+      setIsOpen(true);
+    }
+  }, [defaultOpen]);
+
+  if (!hasVisibleChildren(children)) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-1">
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        className="w-full flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider tt-sec !text-[color:var(--sidebar-text)] cursor-pointer select-none transition-colors hover:bg-[color:var(--nav-hover)] hover:!text-[color:var(--sidebar-text-active)]"
+        style={{ color: 'var(--sidebar-text)' }}
+      >
+        <Icon size={14} className="shrink-0" />
+        <span className="flex-1 text-left truncate">{label}</span>
+        {isOpen ? (
+          <ChevronDown size={14} className="shrink-0 opacity-70" />
+        ) : (
+          <ChevronRight size={14} className="shrink-0 opacity-70" />
+        )}
+      </button>
+      <div
+        className={`overflow-hidden transition-[max-height] duration-200 ease-in-out ${
+          isOpen ? 'max-h-[500px]' : 'max-h-0'
+        }`}
+      >
+        <div className="pt-1 space-y-1">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
@@ -75,65 +166,76 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
-        {(isAdmin || isReadOnly) && (
-          <NavLink to="/" icon={LayoutDashboard} label="Dashboard" />
-        )}
+      <nav className="flex-1 p-3 space-y-3 overflow-y-auto">
+        <NavGroup
+          label="Operations"
+          icon={LayoutDashboard}
+          defaultOpen={isRouteInGroup(OPERATIONS_ROUTES, location.pathname)}
+        >
+          {(isAdmin || isReadOnly) && (
+            <NavLink to="/" icon={LayoutDashboard} label="Dashboard" />
+          )}
 
-        {(isAdmin || isReadOnly || isStaff) && (
-          <NavLink to="/calendar" icon={CalendarDays} label="Notification Calendar" color="text-[color:var(--ui-pink-hi)]" highlight />
-        )}
+          {(isAdmin || isReadOnly || isStaff) && (
+            <NavLink to="/calendar" icon={CalendarDays} label="Notification Calendar" color="text-[color:var(--ui-pink-hi)]" highlight />
+          )}
 
-        {isStaff && (
-          <>
-            <NavLink to="/my-assets" icon={MonitorPlay} label="My Assigned Gear" color="text-[color:var(--ui-cyan-hi)]" highlight />
-            <NavLink to="/my-tickets" icon={LifeBuoy} label="Support Tickets" color="text-[color:var(--ui-violet-hi)]" highlight />
-            <NavLink to="/leave" icon={CalendarDays} label="My Leave" color="text-[color:var(--status-info)]" />
-          </>
-        )}
+          {(isStaff || isAdmin || isManager) && (
+            <>
+              <NavLink to="/my-assets" icon={MonitorPlay} label="My Assigned Gear" color="text-[color:var(--ui-cyan-hi)]" highlight />
+              <NavLink to="/my-tickets" icon={LifeBuoy} label="Support Tickets" color="text-[color:var(--ui-violet-hi)]" highlight />
+              <NavLink to="/leave" icon={CalendarDays} label="My Leave" color="text-[color:var(--status-info)]" />
+            </>
+          )}
 
-        {(isAdmin || isManager) && (
-          <>
-            <NavLink to="/my-assets" icon={MonitorPlay} label="My Assigned Gear" color="text-[color:var(--ui-cyan-hi)]" highlight />
-            <NavLink to="/my-tickets" icon={LifeBuoy} label="Support Tickets" color="text-[color:var(--ui-violet-hi)]" highlight />
-          </>
-        )}
+          {(isAdmin || isReadOnly || isManager) && (
+            <NavLink to="/leave-approvals" icon={CalendarDays} label="Leave Approvals" color="text-[color:var(--ui-violet-hi)]" badgeNode={<NotificationLeaveIcon />} />
+          )}
 
-        {/* Spec 2026-10-13 §7 nav matrix: /leave = Staff, Manager, Admin — Read-Only is route-hidden. */}
-        {(isAdmin || isManager) && (
-          <NavLink to="/leave" icon={CalendarDays} label="My Leave" color="text-[color:var(--status-info)]" />
-        )}
-
-        {(isAdmin || isReadOnly || isManager) && (
-          <NavLink to="/leave-approvals" icon={CalendarDays} label="Leave Approvals" color="text-[color:var(--ui-violet-hi)]" badgeNode={<NotificationLeaveIcon />} />
-        )}
-
-        {(isAdmin || isReadOnly) && (
-          <>
+          {(isAdmin || isReadOnly) && (
             <NavLink to="/scan" icon={ScanBarcode} label="Scan Station" color="text-[color:var(--status-success)]" highlight />
+          )}
+        </NavGroup>
 
-            {isAdmin && (
-              <>
-                <NavLink to="/helpdesk" icon={Wrench} label="IT Helpdesk" color="text-[color:var(--ui-indigo-hi)]" highlight />
-                <NavLink to="/conversations" icon={MessageSquare} label="Conversations" color="text-[color:var(--ui-violet-hi)]" highlight badge={convUnreadCount} />
-                <NavLink to="/assets" icon={Monitor} label="All Hardware" />
-                <NavLink to="/user-assets" icon={UserCheck} label="Personnel Resources" color="text-[color:var(--ui-sky-hi)]" />
-                <NavLink to="/storage" icon={ArchiveRestore} label="Storage Room" />
-                <NavLink to="/users-admin" icon={ShieldAlert} label="User Access" color="text-[color:var(--ui-violet-hi)]" />
-              </>
-            )}
+        <NavGroup
+          label="Inventory"
+          icon={Monitor}
+          defaultOpen={isRouteInGroup(INVENTORY_ROUTES, location.pathname)}
+        >
+          {isAdmin && (
+            <>
+              <NavLink to="/helpdesk" icon={Wrench} label="IT Helpdesk" color="text-[color:var(--ui-indigo-hi)]" highlight />
+              <NavLink to="/conversations" icon={MessageSquare} label="Conversations" color="text-[color:var(--ui-violet-hi)]" highlight badge={convUnreadCount} />
+              <NavLink to="/assets" icon={Monitor} label="All Hardware" />
+              <NavLink to="/user-assets" icon={UserCheck} label="Personnel Resources" color="text-[color:var(--ui-sky-hi)]" />
+              <NavLink to="/storage" icon={ArchiveRestore} label="Storage Room" />
+            </>
+          )}
 
-            <NavLink to="/kits" icon={Package} label="Asset Kits" />
-            <NavLink to="/consumables" icon={Box} label="Consumables" />
-            <NavLink to="/types" icon={Tags} label="Global Asset Types" />
+          {(isAdmin || isReadOnly) && (
+            <>
+              <NavLink to="/kits" icon={Package} label="Asset Kits" />
+              <NavLink to="/consumables" icon={Box} label="Consumables" />
+              <NavLink to="/types" icon={Tags} label="Global Asset Types" />
+            </>
+          )}
+        </NavGroup>
+
+        <NavGroup
+          label="Administration"
+          icon={ShieldAlert}
+          defaultOpen={isRouteInGroup(ADMIN_ROUTES, location.pathname)}
+        >
+          {isAdmin && (
+            <NavLink to="/users-admin" icon={ShieldAlert} label="User Access" color="text-[color:var(--ui-violet-hi)]" />
+          )}
+
+          {(isAdmin || isReadOnly) && (
             <NavLink to="/activity" icon={History} label="Activity Log" />
-          </>
-        )}
+          )}
 
-        {/* Settings — every role gets the per-user sections (PLAN.MD §13 P3:
-            non-admin route opening). Section CONTENT is gated by the
-            registry's fail-closed roles map, not by hiding the route. */}
-        <NavLink to="/settings" icon={Settings} label="Settings" color="text-[color:var(--status-warning-hi)]" />
+          <NavLink to="/settings" icon={Settings} label="Settings" color="text-[color:var(--status-warning-hi)]" />
+        </NavGroup>
       </nav>
 
       <div className="p-4 border-t" style={{ borderColor: 'var(--glass-border-subtle)' }}>
