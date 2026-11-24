@@ -1,7 +1,14 @@
 {
   "name": "it-asset-manager",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Enterprise Studio IT Asset Management Platform with React 19, Express 5, and SQLite",
+  "author": "mylad01 <miladnasrollahi.mn@gmail.com> (https://github.com/mylad01)",
+  "homepage": "https://github.com/mylad01/IT-asset-manager#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mylad01/IT-asset-manager.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

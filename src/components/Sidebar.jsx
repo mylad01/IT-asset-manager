@@ -29,6 +29,7 @@ import { useNotifications } from '../hooks/useNotifications';
 import NotificationBell from './NotificationBell';
 import NotificationLeaveIcon from './NotificationLeaveIcon';
 import WidgetErrorBoundary from './error-boundaries/WidgetErrorBoundary';
+import AuthorFooter from './AuthorFooter';
 import api from '../utils/apiClient';
 
 const OPERATIONS_ROUTES = ['/', '/calendar', '/my-assets', '/my-tickets', '/leave', '/leave-approvals', '/scan'];
@@ -266,6 +267,7 @@ export default function Sidebar() {
           <LogOut size={14} />
           Secure Logout
         </button>
+        <AuthorFooter compact className="mt-2.5 opacity-70 hover:opacity-100" />
       </div>
     </aside>
   );

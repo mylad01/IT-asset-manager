@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Lock, User, ShieldCheck, ShieldAlert } from 'lucide-react';
 import api from '../utils/apiClient';
+import AuthorFooter from '../components/AuthorFooter';
 
 const RING_RADIUS = 36;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
@@ -86,7 +87,7 @@ export default function Login() {
   }, [email, password, doLogin]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full glass-modal animate-glass-in overflow-hidden">
         <div className="absolute inset-0 rounded-[20px] bg-gradient-to-br from-white/8 via-transparent to-white/3 pointer-events-none z-10" />
         <div className="relative z-20 bg-gradient-to-r from-[color:var(--status-info-strong)]/40 to-[color:var(--ui-purple-strong)]/30 p-8 text-center border-b" style={{ borderColor: 'var(--glass-border-subtle)' }}>
@@ -121,6 +122,7 @@ export default function Login() {
           </button>
         </form>
       </div>
+      <AuthorFooter className="mt-4" />
     </div>
   );
 }
