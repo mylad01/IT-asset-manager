@@ -6,7 +6,35 @@ import ImageViewerModal from '../components/ImageViewerModal';
 import TransferAssetModal from '../components/TransferAssetModal';
 import AssetHistoryModal from '../components/AssetHistoryModal';
 import GlassConfirmModal from '../components/glass/GlassConfirmModal';
-import { QrCode, Trash2, Image as ImageIcon, ZoomIn, ArrowRightLeft, History, AlertCircle, RefreshCw, Eye } from 'lucide-react';
+import {
+  QrCode,
+  Trash2,
+  Image as ImageIcon,
+  ZoomIn,
+  ArrowRightLeft,
+  History,
+  AlertCircle,
+  RefreshCw,
+  Eye,
+  Camera,
+  Monitor as MonitorIcon,
+  Laptop,
+  Tablet,
+  Mic,
+  Lightbulb,
+  Aperture,
+} from 'lucide-react';
+
+const ASSET_TYPE_ICONS = {
+  Camera: Camera,
+  Workstation: MonitorIcon,
+  Laptop: Laptop,
+  Monitor: MonitorIcon,
+  Tablet: Tablet,
+  'Audio Gear': Mic,
+  Lighting: Lightbulb,
+  Lens: Aperture,
+};
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../hooks/useApi';
 import { useSearchParams } from 'react-router-dom';
@@ -51,7 +79,43 @@ export default function AssetList() {
   };
 
   const columns = [
-    { header: 'Photo', accessor: 'image_url', render: (row) => (row.image_url ? (<div className="relative w-12 h-12 group cursor-zoom-in" onClick={() => setViewerConfig({ isOpen: true, url: row.image_url, alt: row.model })}><img src={row.image_url} alt="Hardware" className="w-12 h-12 object-cover rounded-lg border border-white/20 shadow-sm transition-all group-hover:brightness-75" /><div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg bg-black/30"><ZoomIn size={18} className="tt drop-shadow-md" /></div></div>) : (<div className="w-12 h-12 bg-white/5 rounded-lg border border-white/10 flex items-center justify-center tt-muted"><ImageIcon size={18} /></div>)) },
+    {
+      header: 'Photo',
+      accessor: 'image_url',
+      render: (row) => {
+        const hasRealImage = row.image_url && !row.image_url.includes('dummy-seed');
+        if (hasRealImage) {
+          return (
+            <div
+              className="relative w-12 h-12 group cursor-zoom-in"
+              onClick={() => setViewerConfig({ isOpen: true, url: row.image_url, alt: row.model })}
+            >
+              <img
+                src={row.image_url}
+                alt="Hardware"
+                className="w-12 h-12 object-cover rounded-lg border border-white/20 shadow-sm transition-all group-hover:brightness-75"
+              />
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg bg-black/30">
+                <ZoomIn size={18} className="tt drop-shadow-md" />
+              </div>
+            </div>
+          );
+        }
+        const Icon = ASSET_TYPE_ICONS[row.type] || ImageIcon;
+        return (
+          <div
+            className="w-12 h-12 rounded-lg border flex items-center justify-center transition-all duration-200"
+            style={{
+              background: 'var(--glass-bg-subtle)',
+              borderColor: 'var(--glass-border-subtle)',
+            }}
+            title={row.type || 'Hardware Asset'}
+          >
+            <Icon size={20} style={{ color: 'var(--text-on-glass-muted)' }} />
+          </div>
+        );
+      },
+    },
     { header: 'Asset ID', accessor: 'id', render: (row) => <AssetMiniPreview assetId={row.id}><span className="font-bold tt cursor-pointer hover:text-[color:var(--status-info-hi)] transition-colors" onClick={() => openPreview(row.id)}>{row.id}</span></AssetMiniPreview> },
     { header: 'Type', accessor: 'type' }, { header: 'Model/Specs', accessor: 'model' },
     { header: 'Department', accessor: 'dept', render: (row) => row.dept || <span className="tt-muted">Unassigned</span> },
