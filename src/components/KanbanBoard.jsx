@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback } from 'react';
-import { Clock, ShieldCheck, AlertCircle, MessageSquare, GripVertical } from 'lucide-react';
+import { Clock, ShieldCheck, AlertCircle, MessageSquare, GripVertical, Inbox } from 'lucide-react';
 import { formatId } from '../utils/formatId';
 import ScrollArea from './glass/ScrollArea';
 
@@ -122,14 +122,24 @@ export default function KanbanBoard({ tickets, onTicketDrop, onOpenModal }) {
             {/* Cards Container */}
             <ScrollArea className="flex-1" contentClassName="p-3 space-y-2.5">
               {tickets.filter(t => t.status === status).length === 0 ? (
-                <div className={`flex flex-col items-center justify-center py-10 text-center rounded-xl border-2 border-dashed transition-all duration-300 ${
-                  isHovered ? 'border-white/20 bg-white/[0.04]' : 'border-white/[0.06]'
-                }`}>
-                  <div className={`text-2xl mb-2 transition-all duration-300 ${isHovered ? 'scale-110 opacity-60' : 'opacity-20'}`}>
-                    📋
+                <div
+                  className={`flex flex-col items-center justify-center py-10 px-4 text-center rounded-xl border-2 border-dashed transition-all duration-300 ${
+                    isHovered ? 'border-white/20 bg-white/[0.04]' : 'border-white/[0.06]'
+                  }`}
+                >
+                  <div
+                    className={`p-3 rounded-xl mb-3 transition-all duration-300 ${
+                      isHovered ? 'scale-110 opacity-80' : 'opacity-30'
+                    }`}
+                    style={{ background: 'var(--glass-bg-subtle)' }}
+                  >
+                    <Inbox size={24} style={{ color: 'var(--text-on-glass-muted)' }} />
                   </div>
-                  <p className="text-xs tt-muted font-medium">
+                  <p className="text-xs tt-muted font-medium mb-1">
                     {isHovered ? 'Drop here' : 'No tickets'}
+                  </p>
+                  <p className="text-[10px] tt-muted opacity-60">
+                    {isHovered ? 'Release to move ticket' : 'Drag tickets here or create new'}
                   </p>
                 </div>
               ) : (
