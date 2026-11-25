@@ -6,11 +6,11 @@ RUN apt-get update \
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci --ignore-scripts=false
 
 COPY . .
-RUN npm run build
+RUN node scripts/lib/sqlite3DriverCheck.js && npm run build
 
 ENV NODE_ENV=production
 ENV PORT=3000
