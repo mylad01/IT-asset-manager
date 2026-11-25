@@ -8,6 +8,6 @@
       "onAutoForward": "openBrowser"
     }
   },
-  "postCreateCommand": "bash -c '[ -f .env ] || cp .env.example .env; npm ci --ignore-scripts=false && node scripts/lib/sqlite3DriverCheck.js && npm run reset:db && npm run build'",
+  "postCreateCommand": "bash -c '[ -f .env ] || cp .env.example .env; npm install --no-package-lock --ignore-scripts=false && node scripts/lib/sqlite3DriverCheck.js && npm run reset:db && npm run build'",
   "postStartCommand": "bash -c 'mkdir -p logs && setsid -f node server/index.js > logs/codespace.log 2>&1 < /dev/null'"
 }

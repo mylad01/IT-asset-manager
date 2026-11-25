@@ -7,7 +7,7 @@ RUN apt-get update \
 WORKDIR /app
 
 COPY package.json package-lock.json .npmrc ./
-RUN npm ci --ignore-scripts=false
+RUN npm install --no-package-lock --ignore-scripts=false
 
 COPY . .
 RUN node scripts/lib/sqlite3DriverCheck.js && npm run build
