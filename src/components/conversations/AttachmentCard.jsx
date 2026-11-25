@@ -13,8 +13,9 @@ import { FileText, Download, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import formatBytes from '../../utils/formatBytes';
 import { getStoredToken } from '../../utils/appStorage';
+import { getApiBaseUrl } from '../../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 
 
 /**

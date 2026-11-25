@@ -1,0 +1,13 @@
+{
+  "name": "Studio IT Sync",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": {
+      "label": "Studio IT Sync",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "postCreateCommand": "bash -c '[ -f .env ] || cp .env.example .env; npm install && npm run reset:db && npm run build'",
+  "postStartCommand": "bash -c 'mkdir -p logs && nohup npm start > logs/codespace.log 2>&1 &'"
+}

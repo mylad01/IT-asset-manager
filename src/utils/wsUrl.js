@@ -7,7 +7,9 @@
  *   - Empty in production → same origin as the deployed frontend
  */
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+import { getApiBaseUrl } from './apiBase';
+
+const API_BASE = getApiBaseUrl();
 
 export function getWebSocketUrl(path = '/ws') {
   if (/^https?:/i.test(API_BASE)) {

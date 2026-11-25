@@ -1,12 +1,17 @@
 import { useState, useCallback, useRef } from 'react';
 import api from '../utils/apiClient';
 import toast from 'react-hot-toast';
+import { getApiBaseUrl } from '../utils/apiBase';
 
 // Some callers still pass full URLs (e.g. 'http://localhost:3000/api/foo').
 // apiClient prepends BASE_URL, so we must strip it to avoid double-prefixing.
-const BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000');
+const BASE = getApiBaseUrl();
+const STRIP_PREFIXES = [BASE, 'http://localhost:3000'].filter(Boolean);
 function stripBase(url) {
-  if (typeof url === 'string' && url.startsWith(BASE)) return url.slice(BASE.length);
+  if (typeof url !== 'string') return url;
+  for (const prefix of STRIP_PREFIXES) {
+    if (url.startsWith(prefix)) return url.slice(prefix.length);
+  }
   return url;
 }
 

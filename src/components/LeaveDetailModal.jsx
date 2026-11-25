@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, User, Building2, CalendarDays, FileText, Download, Clock, CheckCircle, XCircle, MessageSquare } from 'lucide-react';
 import { getStoredToken } from '../utils/appStorage';
 import ModalPortal from './ModalPortal';
+import { getApiBaseUrl } from '../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 
 /** Auth-blob thumbnail hook for one leave attachment (mirrors AttachmentCard.jsx).
  *  Inline <img> cannot send the Authorization header, and the

@@ -1,0 +1,15 @@
+node_modules
+dist
+logs
+backups
+delivery
+.git
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+uploads/*
+!uploads/.gitkeep
+.superpowers

@@ -101,6 +101,13 @@ app.use(express.json({ limit: '256kb' }));             // Parse JSON bodies with
 // Private upload subtrees are never served statically: conversations, their
 // archives, and leave attachments stream through auth-checked API routes only
 // (404 here closes the unauthenticated-read hole verified 2026-10-13).
+// Ensure upload directories exist on fresh clones/containers so multer destinations never ENOENT
+const PROJECT_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+for (const relDir of ['uploads', 'uploads/conversations', 'uploads/archive/conversations', 'uploads/branding']) {
+  const absDir = resolve(PROJECT_ROOT, relDir);
+  if (!existsSync(absDir)) mkdirSync(absDir, { recursive: true });
+}
+
 app.use('/uploads', privateUploadsGuard);
 app.use('/uploads', express.static('uploads', { setHeaders: uploadsStaticHeaders })); // Public uploads with serve-time hardening (nosniff always; SVG behind script-blocking CSP sandbox; unknown/non-raster extensions forced to download)
 
@@ -119,6 +126,23 @@ app.use('/api', routes);                                // Mount the aggregated 
 if (env.LOG_DIR) {
   app.get('/api/_test/error', () => {                   // GET /api/_test/error triggers a test exception
     throw new Error('Intentional test error for logging verification'); // Unhandled error caught by errorHandler
+  });
+}
+
+// ── Single-Port SPA Frontend Serving ──
+// When `npm run build` has produced dist/index.html, Express serves the compiled
+// React frontend and falls back to index.html for client-side routes so one
+// process (:3000) handles UI, /api, /uploads, and /ws in Codespaces & production.
+const DIST_DIR = resolve(PROJECT_ROOT, 'dist');
+const DIST_INDEX = resolve(DIST_DIR, 'index.html');
+if (existsSync(DIST_INDEX)) {
+  app.use(express.static(DIST_DIR));
+  app.use((req, res, next) => {
+    if (req.method !== 'GET' && req.method !== 'HEAD') return next();
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads') || req.path.startsWith('/ws')) {
+      return next();
+    }
+    res.sendFile(DIST_INDEX);
   });
 }
 

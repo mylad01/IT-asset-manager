@@ -8,8 +8,9 @@ import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import Lightbox from './Lightbox';
+import { getApiBaseUrl } from '../../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 
 const PAGE_SIZE = 50;
 

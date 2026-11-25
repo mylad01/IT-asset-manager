@@ -8,8 +8,9 @@ import { useHighlight } from '../hooks/useHighlight';
 import { getStoredToken } from '../utils/appStorage';
 import useTablePrefs from '../hooks/useTablePrefs';
 import toast from 'react-hot-toast';
+import { getApiBaseUrl } from '../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+const BASE_URL = getApiBaseUrl();
 
 const ENTITY_ICONS = {
   asset: HardDrive,

@@ -14,8 +14,9 @@ import { useAuth } from '../context/AuthContext';
 import BulkScanBar from './BulkScanBar';
 import AssetComparePanel from './AssetComparePanel';
 import AssetTimeline from './AssetTimeline';
+import { getApiBaseUrl } from '../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 
 // ── Animation Variants ──────────────────────────────────────────────
 const backdropVariants = {

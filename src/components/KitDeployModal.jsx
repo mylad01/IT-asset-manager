@@ -7,8 +7,9 @@ import {
 import ModalPortal from './ModalPortal';
 import ScrollArea from './glass/ScrollArea';
 import api from '../utils/apiClient';
+import { getApiBaseUrl } from '../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 
 const backdropVariants = { hidden: { opacity: 0 }, visible: { opacity: 1 }, exit: { opacity: 0 } };
 const panelVariants = {

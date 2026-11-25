@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Tag, User } from 'lucide-react';
 import { getStoredToken } from '../utils/appStorage';
+import { getApiBaseUrl } from '../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 
 /**
  * Lightweight hover tooltip that shows an asset thumbnail, status, and model.

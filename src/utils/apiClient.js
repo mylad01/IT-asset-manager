@@ -16,9 +16,10 @@
 import toast from 'react-hot-toast';
 import { clearStoredAuth, getStoredToken } from './appStorage';
 import { dispatchDiskStatus } from './diskEvents';
+import { getApiBaseUrl } from './apiBase';
 
 // ── Configuration ────────────────────────────────────────────────────
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 const MAX_RETRIES = 3;
 const MAX_429_BACKOFF_MS = 5000; // cap per-retry sleep (see 429 branch)
 const REDIRECT_DELAY_MS = 800;

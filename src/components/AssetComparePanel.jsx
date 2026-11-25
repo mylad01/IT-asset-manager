@@ -4,7 +4,8 @@ import { X, ArrowLeftRight, Image as ImageIcon, AlertCircle, Loader2 } from 'luc
 import { DYNAMIC_FIELDS } from '../utils/dynamicFields';
 import { getStoredToken } from '../utils/appStorage';
 import ModalPortal from './ModalPortal';
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+import { getApiBaseUrl } from '../utils/apiBase';
+const BASE_URL = getApiBaseUrl();
 
 const backdropVariants = { hidden: { opacity: 0 }, visible: { opacity: 1 }, exit: { opacity: 0 } };
 const panelVariants = {

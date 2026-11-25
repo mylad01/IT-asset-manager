@@ -11,6 +11,11 @@
 [![Node.js](https://img.shields.io/badge/Node.js-22+-339933.svg?style=flat&logo=node.js)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<br />
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/mylad01/IT-asset-manager)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mylad01/IT-asset-manager)
+
 A mission-critical, full-stack IT Operations & Hardware Asset Management platform engineered for studio, media production, and enterprise creative environments. Combines real-time telemetry, hardware lifecycle tracking, dynamic QR label printing, Kanban helpdesk dispatching, threaded messaging, and staff leave approvals inside a custom glassmorphism design system.
 
 [Explore Features](#-core-feature-tour) &bull;
@@ -176,7 +181,17 @@ npm run seed:bulk
 npm run dev
 ```
 
-Visit **`http://localhost:5173`** in your browser.
+Or run everything (built React frontend + Express API + WebSockets) on a single port (`3000`):
+```bash
+npm run build
+npm start
+```
+
+Visit **`http://localhost:3000`** (single-port production mode) or **`http://localhost:5174`** (Vite dev mode) in your browser.
+
+### ☁️ One-Click Cloud Launch
+- **GitHub Codespaces**: Click **Open in GitHub Codespaces** above (or **Code → Codespaces → Create codespace on main**). The `.devcontainer/devcontainer.json` setup installs packages, seeds the SQLite database, builds the frontend, starts the server on port `3000`, and opens the app automatically.
+- **Docker / Render**: Includes a production `Dockerfile` and `render.yaml` for one-click cloud hosting.
 
 ---
 

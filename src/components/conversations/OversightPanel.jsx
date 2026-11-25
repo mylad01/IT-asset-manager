@@ -17,8 +17,9 @@ import { getStoredToken, getStoredUser } from '../../utils/appStorage';
 import toast from 'react-hot-toast';
 import ChatPanel from './ChatPanel';
 import formatBytes from '../../utils/formatBytes';
+import { getApiBaseUrl } from '../../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000';
+const BASE_URL = getApiBaseUrl();
 
 export default function OversightPanel({ onClose, onRefreshSidebar }) {
   const [rows, setRows] = useState([]);
